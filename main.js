@@ -16,6 +16,7 @@ window.onload = function () {
     gameEngine.init(ctx, RULE);
     gameEngine.addBackground(new Background(gameEngine));
     gameEngine.start();
+    
     var slider = document.getElementById('slider');
     slider.onchange = function() { 
         gameEngine.delay = this.value;
