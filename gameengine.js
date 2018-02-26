@@ -77,11 +77,6 @@ GameEngine.prototype.loop = function () {
     }
 }
 
-//theRuleArray is a 2D array of integers 0 or 1 with 0 is white and 1 is black
-//Ex: {{0, 1, 2, 3}, {0, 1, 2, 3}}
-//0 1 2
-//  3
-//0, 1, 2 are the pre-generated cells and 3 is the result.
 GameEngine.prototype.getCellColor = function (theCellLeft, theCellCenter, theCellRight) {
     for (let i = 0; i < this.rule.length; i++) {
         if (theCellLeft === this.rule[i][0]
