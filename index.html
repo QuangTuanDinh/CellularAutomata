@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <link rel="stylesheet" type="text/css" href="./css/main.css">
     <meta charset="utf-8">
     <title>Cellular Automaton</title>
     <script type="text/javascript" src="./gameengine.js"></script>
@@ -10,8 +11,21 @@
 </head>
 
 <body>
-    <canvas id="mainCanvas" tabindex="1" width="1200" height="600" style="border: 1px solid black; background: white"></canvas>
-    <input id="slider" type="range" value="1" min="0.1" max="2" step="0.1"/>
+    <canvas id="mainCanvas" tabindex="1" width="1400" height="700" style="border: 1px solid black; background: white"></canvas>
+    <canvas id="drawCanvas" tabindex="1" width="1200" height="600" style="border: 1px solid black; background: white"></canvas>
+    <div class="slider">
+        <p class="noselect">Delay</p>
+        <input id="slider" type="range" value="1" min="0.1" max="2" step="0.1" />
+    </div>
+
+    <div class="rules">
+        <p class="noselect">Rules</p>
+        <select name="rules">
+            <option value="value1" selected>30</option>
+            <option value="value2">20</option>
+            <option value="value3">10</option>
+        </select>
+    </div>
 </body>
 
 </html>
