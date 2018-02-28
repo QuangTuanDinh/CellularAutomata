@@ -1,9 +1,9 @@
 class Background {
     constructor(theGameEngine) {
         this.gameEngine = theGameEngine;
-        this.ctx = theGameEngine.ctx;
     }
-    draw() {
+    draw(theCtx) {
+        this.ctx = theCtx;
         for (let i = 0; i < this.gameEngine.surfaceWidth; i += CELL_SIZE) {
             this.ctx.strokeStyle = 'black';
             this.ctx.beginPath();
@@ -19,6 +19,7 @@ class Background {
             this.ctx.stroke();
         }
     }
+
     update() {
     }
 }

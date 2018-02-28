@@ -9,41 +9,53 @@ window.requestAnimFrame = (function () {
         };
 })();
 
-function GameEngine() {
-    this.entities = [[0, 0, 1, 0, 0]];
-    this.currentLevel = 0;
-    this.clockTick = 0;
-    this.delay = DEFAULT_DELAY;
+function GameEngine(theRule, theDelayValue) {
+    this.rule = theRule;
+    this.delay = theDelayValue;
     this.background = null;
-    this.ctx = null;
+    this.cellCtx = null;
     this.surfaceWidth = null;
     this.surfaceHeight = null;
+    this.entities = [];
 }
 
-GameEngine.prototype.init = function (theCtx, theRule) {
-    this.ctx = theCtx;
-    this.rule = theRule;
-    this.surfaceWidth = this.ctx.canvas.width;
-    this.surfaceHeight = this.ctx.canvas.height;
+GameEngine.prototype.init = function (theCellCtx, background) {
+    this.entities.length = 0;
+    this.entities.push([0, 0, 1, 0, 0]);
+    this.currentLevel = 0;
+    this.clockTick = 0;
+    this.cellCtx = theCellCtx;
+    this.surfaceWidth = this.cellCtx.canvas.width;
+    this.surfaceHeight = this.cellCtx.canvas.height;
     this.center = Math.floor((this.surfaceWidth / 2) / CELL_SIZE);
     this.timer = new Timer();
+    this.background = background;
+    this.addBackground(this.background);
 }
 
 GameEngine.prototype.start = function () {
     var that = this;
     (function gameLoop() {
         that.loop();
-        requestAnimFrame(gameLoop, that.ctx.canvas);
+        requestAnimFrame(gameLoop, that.cellCtx.canvas);
     })();
 }
 
-GameEngine.prototype.addBackground = function (background) {
-    background.draw();
+GameEngine.prototype.reset = function() {
+    this.cellCtx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight);
+    this.cellCtx.save();
+    this.init(this.cellCtx, this.background);
+    this.cellCtx.restore();
+}
+
+GameEngine.prototype.addBackground = function (theBackground) {
+    this.background = theBackground;
+    theBackground.draw(this.cellCtx);
 }
 
 GameEngine.prototype.addEntity = function (entity) {
     this.entities.push(entity);
-    entity.draw(this.ctx);
+    entity.draw(this.cellCtx);
 }
 
 GameEngine.prototype.draw = function () {
@@ -51,7 +63,7 @@ GameEngine.prototype.draw = function () {
     var x = this.center - ((currentArray.length - 1) / 2);
     for (let i = 0; i < currentArray.length; i++) {
         if (currentArray[i] === 1) {
-            this.ctx.fillRect((x + i) * CELL_SIZE, this.currentLevel * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            this.cellCtx.fillRect((x + i) * CELL_SIZE, this.currentLevel * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         }
     }
 }

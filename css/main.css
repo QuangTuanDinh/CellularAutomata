@@ -7,25 +7,32 @@
               user-select: none;
 }
 
-#mainCanvas {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-}
-#drawCanvas {
+#cellCanvas {
     position: absolute;
     left: 0px;
     top: 50px;
 }
 
-.slider {
-    position: absolute;
+.control {
+    position: relative;
     left: 1250px;
     top: 20px;
 }
 
-.rules {
+#reset {
     position: absolute;
-    left: 1250px;
-    top: 100px;
+    left: 0px;
+    top: 150px;
+}
+
+#start {
+    position: absolute;
+    left: 50px;
+    top: 150px;
+}
+
+#save {
+    position: absolute;
+    left: 93px;
+    top: 150px;
 }
