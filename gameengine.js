@@ -9,13 +9,14 @@ window.requestAnimFrame = (function () {
         };
 })();
 
-function GameEngine(theRule, theDelayValue) {
-    this.rule = theRule;
+function GameEngine(theRuleIndex, theDelayValue) {
+    this.changeRule(theRuleIndex);
     this.delay = theDelayValue;
     this.background = null;
     this.cellCtx = null;
     this.surfaceWidth = null;
     this.surfaceHeight = null;
+    this.isSaving = false;
     this.entities = [];
 }
 
@@ -41,11 +42,30 @@ GameEngine.prototype.start = function () {
     })();
 }
 
-GameEngine.prototype.reset = function() {
+GameEngine.prototype.reset = function () {
     this.cellCtx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight);
     this.cellCtx.save();
     this.init(this.cellCtx, this.background);
     this.cellCtx.restore();
+}
+
+GameEngine.prototype.save = function () {
+    return { entities: this.entities, currentLevel: this.currentLevel, ruleIndex: this.ruleIndex, delay: this.delay }
+}
+
+GameEngine.prototype.load = function (theData) {
+    this.entities = theData.entities;
+    this.currentLevel = theData.currentLevel;
+    this.changeRule(theData.ruleIndex);
+    this.delay = theData.delay;
+    for (let i = 0; i < this.currentLevel; i++) {
+        this.draw(i);
+    }
+}
+
+GameEngine.prototype.changeRule = function (theRuleIndex) {
+    this.ruleIndex = theRuleIndex;
+    this.rule = RULE[this.ruleIndex];
 }
 
 GameEngine.prototype.addBackground = function (theBackground) {
@@ -58,32 +78,33 @@ GameEngine.prototype.addEntity = function (entity) {
     entity.draw(this.cellCtx);
 }
 
-GameEngine.prototype.draw = function () {
-    var currentArray = this.entities[this.currentLevel];
+GameEngine.prototype.draw = function (theLevel) {
+    var currentArray = this.entities[theLevel];
     var x = this.center - ((currentArray.length - 1) / 2);
     for (let i = 0; i < currentArray.length; i++) {
         if (currentArray[i] === 1) {
-            this.cellCtx.fillRect((x + i) * CELL_SIZE, this.currentLevel * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            this.cellCtx.fillRect((x + i) * CELL_SIZE, theLevel * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         }
     }
 }
 
 GameEngine.prototype.update = function () {
-    this.currentLevel++;
     var newLevel = [0, 0];
-    var lastLevelArray = this.entities[this.currentLevel - 1];
+    var lastLevelArray = this.entities[this.currentLevel];
     for (let i = 0; i < lastLevelArray.length - 2; i++) {
         newLevel.push(this.getCellColor(lastLevelArray[i], lastLevelArray[i + 1], lastLevelArray[i + 2]));
     }
     newLevel.push(0);
     newLevel.push(0);
     this.entities.push(newLevel);
+    this.currentLevel++;
+    this.gameState = this.save();
 }
 
 GameEngine.prototype.loop = function () {
     this.clockTick += this.timer.tick();
     if (this.clockTick >= this.delay) {
-        this.draw();
+        this.draw(this.currentLevel);
         this.update();
         this.clockTick = 0;
     }

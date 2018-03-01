@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="./css/main.css">
     <meta charset="utf-8">
     <title>Cellular Automaton by Tuan Dinh</title>
+    <script type="text/javascript" src="http://24.16.255.56:8888/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="./gameengine.js"></script>
     <script type="text/javascript" src="./main.js"></script>
     <script type="text/javascript" src="./background.js"></script>
@@ -18,7 +19,8 @@
         <input type="range" id="slider" value="0.5" min="0.01" max="1" step="0.01" />
         <button id="reset" disabled>Reset</button>
         <button id="start">Start</button>
-        <button id="save">Save</button>
+        <button id="save" disabled>Save</button>
+        <button id="load">Load</button>
         <p class="noselect">Rules</p>
         <select id="rules">
             <option selected>30</option>
